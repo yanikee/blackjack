@@ -188,6 +188,20 @@ function calculate() {
   console.log(`所持金は$${data.money}になりました`)
 }
 
+function nextGame_bool() {
+  return new Promise((resolve) => {
+    readline.question("ゲームを続けますか？ (y/n): ", (answer) => {
+      if (answer.toLowerCase() === "y") {
+        resolve(true);
+      } else {
+        resolve(false);
+      }
+    });
+  });
+}
+
+
+
 async function Game() {
   console.log(`あなたの所持金は$${data.money}です。`);
   data.bet = await askBet();
@@ -248,21 +262,28 @@ async function Game() {
   console.log()
   calculate()
 
-  console.log("---Next Game---")
-
-  //console.log(data)
-  data.bet = 0,
-  data.dealer = [[], []], //[1,2,3,...,13], [A,2,3,...,K]]
-  data.player = [[], []], //[1,2,3,...,13], [A,2,3,...,K]]
-  data.dealer_total = 0,
-  data.player_total = 0,
-  data.dealer_loop = true,
-  data.player_loop = true,
-  data.dealer_result = null,
-  data.player_result = null,
-  data.result = null
-  await Game()
-  // readline.close();
+  const next = await nextGame_bool()
+  if (next && data.money > 0) {
+    console.log("---Next Game---");
+    //console.log(data)
+    data.bet = 0;
+    data.dealer = [[], []]; //[1,2,3,...,13], [A,2,3,...,K]]
+    data.player = [[], []]; //[1,2,3,...,13], [A,2,3,...,K]]
+    data.dealer_total = 0;
+    data.player_total = 0;
+    data.dealer_loop = true;
+    data.player_loop = true;
+    data.dealer_result = null;
+    data.player_result = null;
+    data.result = null;
+    await Game();
+  } else if (next && data.money == 0) {
+    console.log("金持ってねーじゃん");
+    readline.close();
+  } else {
+    console.log("終了します");
+    readline.close();
+  }
 }
 
 Game()
