@@ -1,6 +1,8 @@
 const data = {
   money: 5,
-  bet: 0
+  bet: 0,
+  dealer: [],
+  player: []
 };
 
 const readline = require('readline').createInterface({
@@ -28,5 +30,14 @@ function start() {
   askBet()
 }
 
+function dealingCards() {
+  for (let value of ["dealer", "player"]) {
+    for (let i = 0; i < 2; i++) {
+      data[value].push(Math.floor(Math.random() * 13) + 1);
+    }
+  }
+}
 
 start()
+dealingCards()
+console.log(data)
